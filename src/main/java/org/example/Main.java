@@ -70,7 +70,6 @@ public class Main {
                                     Map<Character, List<Integer>> potentialSequence) {
         if (potentialSequence.isEmpty()) return inputString;
 
-        // 只处理第一个 key-value（因为你说只传一个字符的 index 范围）
         Map.Entry<Character, List<Integer>> entry = potentialSequence.entrySet().iterator().next();
         List<Integer> range = entry.getValue();
 
@@ -85,7 +84,6 @@ public class Main {
             throw new IndexOutOfBoundsException("Invalid range: " + start + " to " + end);
         }
 
-        // 构造新字符串（保留范围之外的部分）
         String newString = inputString.substring(0, start) + inputString.substring(end + 1);
         return newString;
     }
