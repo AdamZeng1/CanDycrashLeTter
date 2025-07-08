@@ -22,7 +22,8 @@ public class Main {
             }
 
             if(checkIfThereAreNextCharacter(inputString, i)) {
-                while(character==inputString.charAt(i+1)) {
+                while(checkIfThereAreNextCharacter(inputString, i) &&
+                        character==inputString.charAt(i+1)) {
                     List<Integer> indexes = characterOccurrence.get(character);
                     indexes.add(i+1);
                     i++;
