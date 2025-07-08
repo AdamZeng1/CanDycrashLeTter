@@ -13,12 +13,7 @@ public class Main {
         Map<Character, List<Integer>> characterOccurrence = new HashMap<>();
         for (int i = 0; i < inputString.length(); i++) {
             Character character = inputString.charAt(i);
-            if(!characterOccurrence.containsKey(character)) {
-                characterOccurrence.put(character, new ArrayList<>(List.of(i)));
-            } else {
-                List<Integer> indexes = characterOccurrence.get(character);
-                indexes.add(i);
-            }
+            characterOccurrence.computeIfAbsent(character, k -> new ArrayList<>()).add(i);
 
             if(checkIfThereAreNextCharacter(inputString, i)) {
                 while(checkIfThereAreNextCharacter(inputString, i) &&
@@ -56,12 +51,7 @@ public class Main {
         Map<Character, List<Integer>> characterOccurrence = new HashMap<>();
         for (int i = 0; i < inputString.length(); i++) {
             Character character = inputString.charAt(i);
-            if(!characterOccurrence.containsKey(character)) {
-                characterOccurrence.put(character, new ArrayList<>(List.of(i)));
-            } else {
-                List<Integer> indexes = characterOccurrence.get(character);
-                indexes.add(i);
-            }
+            characterOccurrence.computeIfAbsent(character, k -> new ArrayList<>()).add(i);
 
             if(checkIfThereAreNextCharacter(inputString, i)) {
                 while(checkIfThereAreNextCharacter(inputString, i) &&
