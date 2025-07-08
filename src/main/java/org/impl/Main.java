@@ -1,4 +1,4 @@
-package org.example;
+package org.impl;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -95,19 +95,6 @@ public class Main {
         }
     }
 
-
-    // do we need this?
-    public void addPreviousCharacter(Character character,
-                                     Map<Character, List<Integer>> characterOccurrence,
-                                     Map<Character, List<Integer>> intendedSequence) {
-        List<Integer> indexes = characterOccurrence.get(character + 1);
-        for (int i = 0; i < indexes.size(); i++) {
-            if (indexes.get(i) > intendedSequence.get(character).getFirst()) {
-                indexes.add(i, intendedSequence.get(character).getFirst());
-            }
-        }
-    }
-
     public int removeCharacterEqOrGtThree(String inputString,
                                            Map<Character, List<Integer>> intendedSequence,
                                            Character character,
@@ -185,7 +172,7 @@ public class Main {
                                                              int lastIndexOfRemoval) {
         for (Map.Entry<Character, List<Integer>> entry : characterOccurrence.entrySet()) {
             List<Integer> indexes = entry.getValue();
-            for (int i = 0; i < indexes.size() - numberOfRemovals; i++) {
+            for (int i = 0; i < indexes.size() ; i++) {
                 int index = indexes.get(i);
                 if(index > lastIndexOfRemoval) {
                     indexes.set(i, index - numberOfRemovals);
@@ -204,16 +191,6 @@ public class Main {
             return true;
         }
     }
-
-    public Boolean checkIfNextCharacterIsTheSame(String inputString, int currentIterationCharacterIndex) {
-        int currentIterationNextCharacterIndex = currentIterationCharacterIndex + 1;
-        if(inputString.charAt(currentIterationNextCharacterIndex) == inputString.charAt(currentIterationCharacterIndex)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
     public Map<Character, List<Integer>> checkIfMoreThanThreeCharacterSequence(Map<Character, List<Integer>> characterOccurrence) {
         final int MIN_LENGTH = 3;
