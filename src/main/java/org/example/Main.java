@@ -6,9 +6,51 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         Main main = new Main();
-        main.removeCharacterEqOrGtThree("aabcccbbad");
+        main.removeCharacterEqOrGtThreeAndAddPreviousCharacter("abcccbad");
     }
 
+    public void removeCharacterEqOrGtThreeAndAddPreviousCharacter(String inputString) {
+        Map<Character, List<Integer>> characterOccurrence = new HashMap<>();
+        for (int i = 0; i < inputString.length(); i++) {
+            Character character = inputString.charAt(i);
+            if(!characterOccurrence.containsKey(character)) {
+                characterOccurrence.put(character, new ArrayList<>(List.of(i)));
+            } else {
+                List<Integer> indexes = characterOccurrence.get(character);
+                indexes.add(i);
+            }
+
+            if(checkIfThereAreNextCharacter(inputString, i)) {
+                while(checkIfThereAreNextCharacter(inputString, i) &&
+                        character==inputString.charAt(i+1)) {
+                    List<Integer> indexes = characterOccurrence.get(character);
+                    indexes.add(i+1);
+                    i++;
+                }
+            }
+
+            Map<Character, List<Integer>> potentialSequence = checkIfMoreThanThreeCharacterSequence(characterOccurrence);
+            if(!potentialSequence.isEmpty()) { // have sequence
+                int numberOfRemovals = removeCharacterEqOrGtThree(inputString,
+                        potentialSequence,
+                        character,
+                        characterOccurrence);
+                String newInputString = reconstructStringWithPreviousCharacter(inputString, potentialSequence,character);
+                System.out.println("-> " + newInputString);
+                inputString = newInputString;
+                i = i - numberOfRemovals;
+            }
+            // before checking, check if it is the end of the string
+            // if it is, check if there are three characters in sequence after adding to the map
+            // if it is not, checking if next character is the same as current iterating character
+            // if it is, keep putting in the character into the map
+            // if it is not, check if there are three characters or more in sequence after adding to the map
+            // if there are, create a new string which length equals original minus number of sequential characters.
+            // after removal, check the all index after the last index of removed characters and minus number of removed characters
+            // iterating the map according to a b c, reconstruct the string and output.
+            // reassign the input string and relocate the index
+        }
+    }
 
     public void removeCharacterEqOrGtThree(String inputString) {
         Map<Character, List<Integer>> characterOccurrence = new HashMap<>();
@@ -36,7 +78,6 @@ public class Main {
                         potentialSequence,
                         character,
                         characterOccurrence);
-                int lengthOfNewString = inputString.length() - numberOfRemovals;
                 String newInputString = reconstructString(inputString, potentialSequence);
                 System.out.println("-> " + newInputString);
                 inputString = newInputString;
@@ -54,6 +95,19 @@ public class Main {
         }
     }
 
+
+    // do we need this?
+    public void addPreviousCharacter(Character character,
+                                     Map<Character, List<Integer>> characterOccurrence,
+                                     Map<Character, List<Integer>> intendedSequence) {
+        List<Integer> indexes = characterOccurrence.get(character + 1);
+        for (int i = 0; i < indexes.size(); i++) {
+            if (indexes.get(i) > intendedSequence.get(character).getFirst()) {
+                indexes.add(i, intendedSequence.get(character).getFirst());
+            }
+        }
+    }
+
     public int removeCharacterEqOrGtThree(String inputString,
                                            Map<Character, List<Integer>> intendedSequence,
                                            Character character,
@@ -65,6 +119,35 @@ public class Main {
                                                     lengthOfNewString);
         removeIntendedCharacters(character,characterOccurrence,intendedSequence);
         return numberOfRemovals;
+    }
+
+    public String reconstructStringWithPreviousCharacter(String inputString,
+                                    Map<Character, List<Integer>> potentialSequence,
+                                                         Character character) {
+        if (potentialSequence.isEmpty()) return inputString;
+
+        Map.Entry<Character, List<Integer>> entry = potentialSequence.entrySet().iterator().next();
+        List<Integer> range = entry.getValue();
+
+        if (range.size() != 2) {
+            throw new IllegalArgumentException("Index range must contain exactly two elements.");
+        }
+
+        int start = range.get(0); // lower bound
+        int end = range.get(1);   // upper bound
+
+        if (start > end || start < 0 || end >= inputString.length()) {
+            throw new IndexOutOfBoundsException("Invalid range: " + start + " to " + end);
+        }
+
+        Character previousCharacter = character == 'a'? '\0': (char)(character - 1);
+        String newString;
+        if(character == 'a') {
+            newString = inputString.substring(0, start) + inputString.substring(end + 1);
+        } else {
+            newString = inputString.substring(0, start) + previousCharacter + inputString.substring(end + 1);
+        }
+        return newString;
     }
 
     public String reconstructString(String inputString,

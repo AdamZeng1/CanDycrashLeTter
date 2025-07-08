@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MainTest {
 
+    // ------------------ Stage 1 ------------------
+
     @Test
     void testRemoveSingleTriplet() {
         Main main = new Main();
@@ -69,7 +71,70 @@ public class MainTest {
         assertEquals(expectedOutput, actualOutput.trim());
     }
 
-    // Helper to capture System.out.print output
+    // ------------------ Stage 2 ------------------
+
+    @Test
+    void testRemoveAndReplaceSingleTriplet_Stage2() {
+        Main main = new Main();
+        String input = "aabcccbbad";
+        String sep = System.lineSeparator();
+        String expectedOutput = "-> aabbbbad" + sep +
+                "-> aaaad" + sep +
+                "-> d";
+
+        String actualOutput = captureOutput(() -> main.removeCharacterEqOrGtThreeAndAddPreviousCharacter(input));
+        assertEquals(expectedOutput, actualOutput.trim());
+    }
+
+    @Test
+    void testNoTriplets_Stage2() {
+        Main main = new Main();
+        String input = "abcde";
+        String expectedOutput = "";
+
+        String actualOutput = captureOutput(() -> main.removeCharacterEqOrGtThreeAndAddPreviousCharacter(input));
+        assertEquals(expectedOutput, actualOutput.trim());
+    }
+
+    @Test
+    void testAllTriplets_Stage2() {
+        Main main = new Main();
+        String input = "aaabbbccc";
+        String sep = System.lineSeparator();
+        String expectedOutput = "-> bbbccc" + sep +
+                "-> accc" + sep +
+                "-> ab";
+
+        String actualOutput = captureOutput(() -> main.removeCharacterEqOrGtThreeAndAddPreviousCharacter(input));
+        assertEquals(expectedOutput, actualOutput.trim());
+    }
+
+    @Test
+    void testLongNestedTriplets_Stage2() {
+        Main main = new Main();
+        String input = "aaabbbcccaaa";
+        String sep = System.lineSeparator();
+        String expectedOutput = "-> bbbcccaaa" + sep +
+                "-> acccaaa" + sep +
+                "-> abaaa" + sep +
+                "-> ab";
+
+        String actualOutput = captureOutput(() -> main.removeCharacterEqOrGtThreeAndAddPreviousCharacter(input));
+        assertEquals(expectedOutput, actualOutput.trim());
+    }
+
+    @Test
+    void testEmptyString_Stage2() {
+        Main main = new Main();
+        String input = "";
+        String expectedOutput = "";
+
+        String actualOutput = captureOutput(() -> main.removeCharacterEqOrGtThreeAndAddPreviousCharacter(input));
+        assertEquals(expectedOutput, actualOutput.trim());
+    }
+
+    // ------------------ Shared Helper ------------------
+
     private String captureOutput(Runnable task) {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
