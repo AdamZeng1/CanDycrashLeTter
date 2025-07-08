@@ -35,15 +35,6 @@ public class Main {
                 inputString = newInputString;
                 i = i - numberOfRemovals;
             }
-            // before checking, check if it is the end of the string
-            // if it is, check if there are three characters in sequence after adding to the map
-            // if it is not, checking if next character is the same as current iterating character
-            // if it is, keep putting in the character into the map
-            // if it is not, check if there are three characters or more in sequence after adding to the map
-            // if there are, create a new string which length equals original minus number of sequential characters.
-            // after removal, check the all index after the last index of removed characters and minus number of removed characters
-            // iterating the map according to a b c, reconstruct the string and output.
-            // reassign the input string and relocate the index
         }
     }
 
